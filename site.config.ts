@@ -2,31 +2,31 @@ import { siteConfig } from './lib/site-config';
 
 export default siteConfig({
   // the site's root Notion page (required)
-  rootNotionPageId: 'd1e89e9e42eb4ebf9486ae0374039efc',
+  rootNotionPageId: 'e8f14162133b489ab32f9ad88e1cdb1f',
 
   // if you want to restrict pages to a single notion workspace (optional)
   // (this should be a Notion ID; see the docs for how to extract this)
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: '2skydev blog',
-  domain: 'blog.2skydev.com',
-  author: '2skydev',
+  name: 'ToolKit Blog',
+  domain: 'notion-blog-sand-tau.vercel.app',
+  author: 'JeongHyeon',
 
   // open graph metadata (optional)
-  description: '2skydev blog - developer blog',
+  description: 'Jeonghyeon - developer blog',
 
   // social usernames (optional)
   // twitter: 'transitive_bs',
-  github: '2skydev',
-  // linkedin: 'fisch2',
+  github: 'jeonghyeon00',
+  linkedin: '정현-송-4ba89323a',
   // newsletter: '#', // optional newsletter URL
   // youtube: '#', // optional youtube channel name or `channel/UCGbXXXXXXXXXXXXXXXXXXXXXX`
 
   // default notion icon and cover images for site-wide consistency (optional)
   // page-specific values will override these site-wide defaults
   defaultPageIcon:
-    'https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0d2daa37-61d0-45b6-b333-9a2bd0bdc3ee%2Fprofile_%25E1%2584%2580%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AA%25E1%2584%258C%25E1%2585%25B5%25E1%2586%25AF_circle.png?table=block&id=d1e89e9e-42eb-4ebf-9486-ae0374039efc&spaceId=2eb5336b-2edb-42d0-bc6c-95d72d4d1b74&width=250&userId=bef10e95-202b-4b6b-9626-7af866b6f9ba&cache=v2',
+    'https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F19c8b54c-8c81-40c4-bd7c-286215164336%2F00a7b24b-4f0d-412f-aa3b-a9850d6dae75%2Fhamb.jpg?table=block&id=e8f14162-133b-489a-b32f-9ad88e1cdb1f&spaceId=19c8b54c-8c81-40c4-bd7c-286215164336&width=250&userId=e110f1de-dc0c-4f68-9f1c-a301b833e8dc&cache=v2',
   defaultPageCover: null,
   defaultPageCoverPosition: 0.5,
 
@@ -43,30 +43,29 @@ export default siteConfig({
   // example:
   //
   // pageUrlOverrides: {
-  //   '/foo': '067dd719a912471ea9a3ac10710e7fdf',
-  //   '/bar': '0be6efce9daf42688f65c76b89f8eb27'
-  // }
+  //   '/introduction': '3e410b6c7b174adfb74d384681fbe13b',
+  // },
   pageUrlOverrides: null,
 
   // whether to use the default notion navigation style or a custom one with links to
   // important pages
   navigationStyle: 'custom',
   navigationLinks: [
-    {
-      title: '카테고리',
-      pageId: '36400db511474331b5c1de6918212469',
-    },
-    {
-      title: '카테고리',
-      pageId: '36400db511474331b5c1de6918212469',
-      menuPage: true,
-    },
+    // {
+    //   title: '소개',
+    //   pageId: '3e410b6c7b174adfb74d384681fbe13b',
+    // },
+    // {
+    //   title: '소개',
+    //   pageId: '3e410b6c7b174adfb74d384681fbe13b',
+    //   menuPage: true,
+    // },
   ],
 
   // -------- custom configs (2skydev) -------------
 
   // date-fns format string
-  dateformat: 'yyyy년 MM월 dd일',
+  dateformat: 'yyyy년 MM월 dd일 HH시 mm분',
 
   // post page - hidden properties
   hiddenPostProperties: ['설명', '상태', '최하위 정렬'],
@@ -75,8 +74,10 @@ export default siteConfig({
   contentPositionTextAlign: 'left',
 
   // default theme color
-  defaultTheme: 'system',
+  defaultTheme: 'light',
 
   // enable comment
   enableComment: true,
+
+  isSearchEnabled: true,
 });

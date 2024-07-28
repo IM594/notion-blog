@@ -31,6 +31,7 @@ import { Page404 } from './Page404';
 import { PageAside } from './PageAside';
 import { PageHead } from './PageHead';
 import styles from './styles.module.css';
+import { Footer } from './Footer';
 
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
@@ -101,7 +102,7 @@ const Tweet = ({ id }: { id: string }) => {
 
 const propertyLastEditedTimeValue = ({ block, pageHeader }, defaultFn: () => React.ReactNode) => {
   if (pageHeader && block?.last_edited_time) {
-    return `Last updated ${formatDate(block?.last_edited_time, {
+    return `마지막 수정 ${formatDate(block?.last_edited_time, {
       month: 'long',
     })}`;
   }
@@ -192,7 +193,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
     [block, recordMap, isBlogPost],
   );
 
-  // const footer = React.useMemo(() => <Footer />, []);
+  const footer = React.useMemo(() => <Footer />, []);
 
   if (router.isFallback) {
     return null;
@@ -249,7 +250,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
         rootDomain={site.domain}
         fullPage={!isLiteMode}
         previewImages={!!recordMap.preview_images}
-        showCollectionViewDropdown={false}
+        showCollectionViewDropdown={true}
         showTableOfContents={showTableOfContents}
         minTableOfContentsItems={minTableOfContentsItems}
         defaultPageIcon={config.defaultPageIcon}
@@ -259,14 +260,8 @@ export const NotionPage: React.FC<types.PageProps> = ({
         mapImageUrl={mapImageUrl}
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
-        pageFooter={
-          config.enableComment ? (
-            !isBlogPost ? null : (
-              <Comments pageId={pageId} recordMap={recordMap} />
-            )
-          ) : null
-        }
-        footer={null}
+        pageFooter={config.enableComment ? !isBlogPost ? null : <Comments /> : null}
+        footer={footer}
       />
     </>
   );
