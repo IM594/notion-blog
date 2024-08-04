@@ -266,7 +266,9 @@ export const PropertyImpl: React.FC<IPropertyProps> = props => {
     () =>
       function CreatedTimeProperty() {
         // CUSTOM: 날짜 포맷
-        return format(utcToZonedTime(block.created_time, 'Asia/Seoul'), dateformat);
+        // return format(utcToZonedTime(block.created_time, 'Asia/Seoul'), dateformat);
+        const date = new Date(block?.created_time);
+        return format(date, dateformat);
       },
     [block?.created_time],
   );
@@ -275,7 +277,9 @@ export const PropertyImpl: React.FC<IPropertyProps> = props => {
     () =>
       function LastEditedTimeProperty() {
         // CUSTOM: 날짜 포맷
-        return format(utcToZonedTime(block?.last_edited_time, 'Asia/Seoul'), dateformat);
+        // return format(utcToZonedTime(block?.last_edited_time, 'Asia/Seoul'), dateformat);
+        const date = new Date(block?.last_edited_time);
+        return format(date, dateformat);
       },
     [block?.last_edited_time],
   );

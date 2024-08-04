@@ -39,9 +39,9 @@ export const FooterImpl: React.FC = () => {
       <div className={styles.copyright}>
         Copyright {year} @ {config.author}
       </div>
-      <HitCount />
+      {/* <HitCount /> */}
 
-      <div className={styles.settings}>
+      {/* <div className={styles.settings}>
         {hasMounted && (
           <a
             className={styles.toggleDarkMode}
@@ -53,7 +53,7 @@ export const FooterImpl: React.FC = () => {
             {isDarkMode ? <IoMoonSharp /> : <IoSunnyOutline />}
           </a>
         )}
-      </div>
+      </div> */}
 
       <div className={styles.social}>
         {config.twitter && (

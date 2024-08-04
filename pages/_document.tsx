@@ -7,14 +7,14 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html lang="ko">
+      <Html lang="zh">
         <Head>
           <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="icon" type="image/png" sizes="128x128" href="favicon.png" />
 
           <link rel="manifest" href="/manifest.json" />
 
-          <link href="/fonts/SpoqaHanSansNeo/index.css" rel="stylesheet" />
+          {/* <link href="/fonts/SpoqaHanSansNeo/index.css" rel="stylesheet" /> */}
 
           <link rel="preconnect" href="https://cdn.jsdelivr.net" />
           <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="" />

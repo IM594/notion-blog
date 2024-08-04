@@ -31,7 +31,6 @@ import { Page404 } from './Page404';
 import { PageAside } from './PageAside';
 import { PageHead } from './PageHead';
 import styles from './styles.module.css';
-import { Footer } from './Footer';
 
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
@@ -100,37 +99,20 @@ const Tweet = ({ id }: { id: string }) => {
   return <TweetEmbed tweetId={id} />;
 };
 
-const propertyLastEditedTimeValue = ({ block, pageHeader }, defaultFn: () => React.ReactNode) => {
-  if (pageHeader && block?.last_edited_time) {
-    return `마지막 수정 ${formatDate(block?.last_edited_time, {
-      month: 'long',
-    })}`;
-  }
-
-  return defaultFn();
+const translations = {
+  en: {
+    lastUpdated: 'Last updated',
+    published: 'Published',
+    author: 'Author',
+  },
+  zh: {
+    lastUpdated: '最后更新于',
+    published: '发布于',
+    author: '作者',
+  },
 };
 
-const propertyDateValue = ({ data, schema, pageHeader }, defaultFn: () => React.ReactNode) => {
-  if (pageHeader && schema?.name?.toLowerCase() === 'published') {
-    const publishDate = data?.[0]?.[1]?.[0]?.[1]?.start_date;
-
-    if (publishDate) {
-      return `Published ${formatDate(publishDate, {
-        month: 'long',
-      })}`;
-    }
-  }
-
-  return defaultFn();
-};
-
-const propertyTextValue = ({ schema, pageHeader }, defaultFn: () => React.ReactNode) => {
-  if (pageHeader && schema?.name?.toLowerCase() === 'author') {
-    return <b>{defaultFn()}</b>;
-  }
-
-  return defaultFn();
-};
+type Language = 'en' | 'zh';
 
 export const NotionPage: React.FC<types.PageProps> = ({
   site,
@@ -141,6 +123,15 @@ export const NotionPage: React.FC<types.PageProps> = ({
 }) => {
   const router = useRouter();
   const lite = useSearchParam('lite');
+
+  const [language, setLanguage] = React.useState<Language>('en');
+
+  React.useEffect(() => {
+    const lang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+    setLanguage(lang);
+  }, []);
+
+  const t = (key: string) => translations[language][key] || key;
 
   const components = React.useMemo(
     () => ({
@@ -153,27 +144,49 @@ export const NotionPage: React.FC<types.PageProps> = ({
       Modal,
       Tweet,
       Header: NotionPageHeader,
-      propertyLastEditedTimeValue,
-      propertyTextValue,
-      propertyDateValue,
+      propertyLastEditedTimeValue: (props, defaultFn) => {
+        const { block, pageHeader } = props;
+        if (pageHeader && block?.last_edited_time) {
+          return `${t('lastUpdated')} ${formatDate(block.last_edited_time, { month: 'long' })}`;
+        }
+        return defaultFn();
+      },
+      propertyDateValue: (props, defaultFn) => {
+        const { data, schema, pageHeader } = props;
+        if (pageHeader && schema?.name?.toLowerCase() === 'published') {
+          const publishDate = data?.[0]?.[1]?.[0]?.[1]?.start_date;
+          if (publishDate) {
+            return `${t('published')} ${formatDate(publishDate, { month: 'long' })}`;
+          }
+        }
+        return defaultFn();
+      },
+      propertyTextValue: (props, defaultFn) => {
+        const { schema, pageHeader } = props;
+        if (pageHeader && schema?.name?.toLowerCase() === 'author') {
+          return (
+            <b>
+              {t('author')}: {defaultFn()}
+            </b>
+          );
+        }
+        return defaultFn();
+      },
       PageLink: ({ children, href, ...rest }) => (
         <Link href={href} {...rest}>
           {children}
         </Link>
       ),
     }),
-    [],
+    [t],
   );
 
-  // lite mode is for oembed
   const isLiteMode = lite === 'true';
-
   const { isDarkMode } = useDarkMode();
 
   const siteMapPageUrl = React.useMemo(() => {
     const params: any = {};
     if (lite) params.lite = lite;
-
     const searchParams = new URLSearchParams(params);
     return mapPageUrl(site, recordMap, searchParams, draftView);
   }, [site, recordMap, lite, draftView]);
@@ -181,10 +194,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
   const keys = Object.keys(recordMap?.block || {});
   const block = recordMap?.block?.[keys[0]]?.value;
 
-  // const isRootPage =
-  //   parsePageId(block?.id) === parsePageId(site?.rootNotionPageId)
   const isBlogPost = block?.type === 'page' && block?.parent_table === 'collection';
-
   const showTableOfContents = !!isBlogPost;
   const minTableOfContentsItems = 1;
 
@@ -192,8 +202,6 @@ export const NotionPage: React.FC<types.PageProps> = ({
     () => <PageAside block={block} recordMap={recordMap} isBlogPost={isBlogPost} />,
     [block, recordMap, isBlogPost],
   );
-
-  const footer = React.useMemo(() => <Footer />, []);
 
   if (router.isFallback) {
     return null;
@@ -206,7 +214,6 @@ export const NotionPage: React.FC<types.PageProps> = ({
   const title = getBlockTitle(block, recordMap) || site.name;
 
   if (!config.isServer) {
-    // add important objects to the window global for easy debugging
     const g = window as any;
     g.pageId = pageId;
     g.recordMap = recordMap;
@@ -222,11 +229,11 @@ export const NotionPage: React.FC<types.PageProps> = ({
     block,
   );
 
-  const socialDescription = getPageProperty<string>('설명', block, recordMap) || config.description;
+  const socialDescription =
+    getPageProperty<string>('Description', block, recordMap) || config.description;
 
   const isIndexPage = pageId === site.rootNotionPageId;
-
-  const hasCollectionView = Object.keys(recordMap.collection_query).length;
+  const hasCollectionView = Object.keys(recordMap.collection_query).length > 0;
 
   return (
     <>
@@ -250,7 +257,7 @@ export const NotionPage: React.FC<types.PageProps> = ({
         rootDomain={site.domain}
         fullPage={!isLiteMode}
         previewImages={!!recordMap.preview_images}
-        showCollectionViewDropdown={true}
+        showCollectionViewDropdown={false}
         showTableOfContents={showTableOfContents}
         minTableOfContentsItems={minTableOfContentsItems}
         defaultPageIcon={config.defaultPageIcon}
@@ -260,8 +267,12 @@ export const NotionPage: React.FC<types.PageProps> = ({
         mapImageUrl={mapImageUrl}
         searchNotion={config.isSearchEnabled ? searchNotion : null}
         pageAside={pageAside}
-        pageFooter={config.enableComment ? !isBlogPost ? null : <Comments /> : null}
-        footer={footer}
+        pageFooter={
+          config.enableComment && isBlogPost ? (
+            <Comments pageId={pageId} recordMap={recordMap} />
+          ) : null
+        }
+        footer={null}
       />
     </>
   );

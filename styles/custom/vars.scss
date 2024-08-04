@@ -1,8 +1,15 @@
 // vars
 :root {
-  --notion-font: 'SpoqaHanSansNeo', 'Tossface';
+  --notion-font-mac: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial;
+  --notion-font-windows: 'Microsoft YaHei', '微软雅黑', 'Segoe UI', Arial;
+  --notion-font-android: Roboto, 'Droid Sans';
+  --notion-font-fallback: sans-serif;
+  --notion-font-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-  --base-font-size: 1.125rem;
+  --notion-font: var(--notion-font-mac), var(--notion-font-windows), var(--notion-font-android),
+    var(--notion-font-fallback), var(--notion-font-emoji);
+
+  --base-font-size: 1rem;
 
   --primary-color: #daaa52;
   --primary-gradient-end-color: #8763ff;
@@ -18,7 +25,7 @@
   --fg-color-5: rgba(55, 53, 47, 0.024);
   --fg-color-6: rgba(55, 53, 47, 0.8);
   --fg-color-icon: var(--fg-color);
-  --fg-color-lighten: #eff3f7;
+  --fg-color-lighten: #ededed;
 
   --bg-color: #ffffff;
   --bg-color-0: rgba(135, 131, 120, 0.15);
@@ -137,4 +144,23 @@
   --notion-gray_background_co: rgba(69, 75, 78, 0.3);
 
   --notion-card-background-color: #2b2c31;
+}
+
+/* macOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  :root {
+    --notion-font: var(--notion-font-mac), var(--notion-font-fallback), var(--notion-font-emoji);
+  }
+}
+/* Windows */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  :root {
+    --notion-font: var(--notion-font-windows), var(--notion-font-fallback), var(--notion-font-emoji);
+  }
+}
+/* Android */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+  :root {
+    --notion-font: var(--notion-font-android), var(--notion-font-fallback), var(--notion-font-emoji);
+  }
 }

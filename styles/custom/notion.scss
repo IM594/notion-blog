@@ -89,6 +89,12 @@ body {
     font-size: 2em;
   }
 
+  @media (max-width: 768px) {
+    .notion-title {
+      text-align: center;
+    }
+  }
+
   // 페이지 메인 이미지 (커버 이미지)
   .notion-page-cover-wrapper,
   .notion-page-cover-wrapper span,
@@ -98,6 +104,7 @@ body {
     height: calc(30vh + var(--notion-header-height)) !important;
     min-height: calc(30vh + var(--notion-header-height)) !important;
     max-height: calc(30vh + var(--notion-header-height)) !important;
+    margin-top: -6px;
   }
 
   // 페이지 메인 이미지 (커버 이미지) 없을 때
@@ -109,6 +116,11 @@ body {
   .notion-page-icon-hero {
     margin-left: 0 !important;
     left: var(--notion-page-left-right-padding);
+
+    @media (max-width: 768px) {
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 
   // 페이지 속성들
@@ -116,39 +128,66 @@ body {
     .notion-collection-row {
       margin-bottom: 5rem;
       border-bottom: none;
-      padding-bottom: 0;
       padding: 0;
     }
 
     .notion-collection-row-body {
-      flex-wrap: wrap;
-      flex-direction: row;
-      gap: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0rem;
+      min-height: 100%;
     }
 
     .notion-collection-row-property {
       margin-bottom: 0.5rem;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-      + .notion-collection-row-property {
-        &::before {
+    .notion-collection-property-type-multi_select {
+      .notion-property {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .notion-collection-row-body {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      .notion-collection-row-property {
+        width: auto;
+        margin-right: 1rem;
+        text-align: left;
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        &:not(:last-child)::after {
           content: '';
           width: 1px;
           height: 10px;
           background-color: var(--fg-color);
           opacity: 0.35;
-          margin: 0 0.5rem;
+          margin-left: 1rem;
         }
       }
-    }
 
-    @media (max-width: 768px) {
       .notion-collection-property-type-multi_select {
-        width: 100%;
-
-        &::before {
-          display: none;
-        }
-
         .notion-property {
           justify-content: flex-start;
         }
@@ -161,12 +200,13 @@ body {
 
     .notion-property-select-item,
     .notion-property-multi_select-item {
-      background-color: transparent !important;
-      padding: 0;
+      background-color: rgba(236, 172, 127, 0.639) !important;
+      // padding: 8px 10px;
+      padding: 0.2em 0.4em !important;
     }
 
     .notion-property-multi_select-item {
-      opacity: 0.7;
+      opacity: 1;
 
       &::before {
         content: '#';
@@ -327,7 +367,7 @@ body {
       &::after {
         content: '';
         display: block;
-        height: 2px;
+        height: 0px;
         width: 4rem;
         background-color: var(--fg-color);
         margin-top: 0.5rem;
@@ -365,12 +405,13 @@ body {
   // 인라인코드
   .notion-inline-code {
     font-weight: 400;
-    font-family: var(--notion-font);
+    // font-family: var(--notion-font);
     letter-spacing: 0;
     background-color: transparent !important;
     position: relative;
+    margin: 4px;
     z-index: 0;
-    background-color: var(--fg-color-lighten) !important;
+    background-color: rgba(227, 227, 227, 0.6392156863) !important;
     transition: 250ms background-color;
   }
 
@@ -468,6 +509,7 @@ body {
   .notion-link:focus,
   .notion-link:hover {
     border-bottom-color: transparent;
+    transition: border-color 200ms ease-in-out, opacity 200ms ease-in-out;
 
     background-image: linear-gradient(
       90.68deg,
@@ -642,7 +684,7 @@ body {
         }
 
         .notion-collection-card-property:nth-child(2) {
-          height: 85px;
+          height: 35px;
 
           .notion-property-text {
             width: 100%;
